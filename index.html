@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CodeGenerator | zySandbox</title>
+    <style>
+        body {
+            background-color: #31343f;
+            color: #dae2f7;
+            font-family: monospace;
+            margin-bottom: 30%;
+        }
+        
+        .comment {
+            color: #b7c2f6;
+        }
+        
+        .keyword {
+            color: #dd98f2;
+        }
+        
+        .keyword2 {
+            color: #ff3e3e;
+        }
+        
+        .variable {
+            color: #face5c;
+        }
+        
+        .indent-1 {
+            text-indent: 50px;
+            ;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main"> </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script>
+        var codeLevel = 0;
+        var currentFunction;
+        var writingBodyCode = false;
+
+        function writeFunction() {
+            if (writingBodyCode) {
+                writeCode();
+                return;
+            }
+            var functionNameVerbs = ["make", "delete", "get", "edit", "create", "post"];
+            var functionNameNouns = ["Cake", "Metadata", "Username", "IP", "Function", "Backend", "Password", "Payload", "Exploit"];
+            var argument = false;
+            if (Math.random() > 0.5) {
+                argument = true;
+            }
+            var argumentList = ["data", "snapshot", "username", "password", "ip", "exploit_name"];
+            var randomVerb = functionNameVerbs[Math.floor(Math.random() * functionNameVerbs.length)];
+            var randomNoun = functionNameNouns[Math.floor(Math.random() * functionNameNouns.length)];
+            if (argument) {
+                var randomArgument = argumentList[Math.floor(Math.random() * argumentList.length)];
+                $("#main").append('<p><span class="keyword">function</span> <span class="keyword2">' + randomVerb + '' + randomNoun + '</span>(<span class="variable">' + randomArgument + '</span>) {' + '</p>');
+            } else {
+                $("#main").append('<p><span class="keyword">function</span> <span class="keyword2">' + randomVerb + '' + randomNoun + '</span>() {' + '</p>');
+            }
+            if (!writingBodyCode) {
+                codeLevel++;
+                writingBodyCode = true;
+            }
+            setTimeout(function() {
+                writeCode();
+            }, 1000);
+        }
+
+        function writeVariable() {
+            var variableObjectList = ["user", "post", "data", "api"];
+            var variableNounList = ["list", "base", "array", "object", "val", "value", "temp", "main", "override", "code", "debug", "metadata", "content"];
+            //
+            var variableOperatorList = ["+", "-", "/", "*"];
+            //
+            var randomObject = variableNounList[Math.floor(Math.random() * variableNounList.length)];
+            var randomNoun = variableObjectList[Math.floor(Math.random() * variableObjectList.length)];
+            var randomOperator = variableOperatorList[Math.floor(Math.random() * variableOperatorList.length)];
+            var randomObject2 = variableNounList[Math.floor(Math.random() * variableNounList.length)];
+            var randomNoun2 = variableObjectList[Math.floor(Math.random() * variableObjectList.length)];
+            var randomNumber = Math.random() * 100;
+            //
+            switch (randomOperator) {
+                case "+":
+                    $("#main").append('<p class="indent-' + codeLevel + '"><span class="keyword">var</span> <span class="keyword2">' + randomNoun + '_' + randomObject + '</span> = <span class="variable">' + randomNoun2 + "_" + randomObject2 + '</span> + ' + randomNumber + ';</p>');
+                    break;
+                case "-":
+                    $("#main").append('<p class="indent-' + codeLevel + '"><span class="keyword">var</span> <span class="keyword2">' + randomNoun + '_' + randomObject + '</span> = <span class="variable">' + randomNoun2 + "_" + randomObject2 + '</span> - ' + randomNumber + ';</p>');
+                    break;
+                case "/":
+                    $("#main").append('<p class="indent-' + codeLevel + '"><span class="keyword">var</span> <span class="keyword2">' + randomNoun + '_' + randomObject + '</span> = <span class="variable">' + randomNoun2 + "_" + randomObject2 + '</span> / ' + randomNumber + ';</p>');
+                    break;
+                case "*":
+                    $("#main").append('<p class="indent-' + codeLevel + '"><span class="keyword">var</span> <span class="keyword2">' + randomNoun + '_' + randomObject + '</span> = <span class="variable">' + randomNoun2 + "_" + randomObject2 + '</span> * ' + randomNumber + ';</p>');
+                    break;
+                default:
+                    console.log("Something died.");
+            }
+            //
+            setTimeout(function() {
+                writeCode()
+            }, 1000);
+        }
+
+        function writeSingleOperator() {
+            var variableObjectList = ["user", "post", "data", "api"];
+            var variableNounList = ["list", "base", "array", "object", "val", "value", "temp", "main", "override", "code", "debug", "metadata", "content"];
+            //
+            var variableOperatorList = ["++", "--"];
+            //
+            var randomObject = variableNounList[Math.floor(Math.random() * variableNounList.length)];
+            var randomNoun = variableObjectList[Math.floor(Math.random() * variableObjectList.length)];
+            var randomOperator = variableOperatorList[Math.floor(Math.random() * variableOperatorList.length)];
+            var randomNumber = Math.random() * 100;
+            //
+            switch (randomOperator) {
+                case "++":
+                    $("#main").append('<p class="indent-' + codeLevel + '"><span class="variable">' + randomNoun + "_" + randomObject + '</span>++;</p>');
+                    break;
+                case "--":
+                    $("#main").append('<p class="indent-' + codeLevel + '"><span class="variable">' + randomNoun + "_" + randomObject + '</span>--;</p>');
+                    break;
+                default:
+                    console.log("Something died.");
+            }
+            //
+            setTimeout(function() {
+                writeCode()
+            }, 1000);
+        }
+
+        function writeComment() {
+            var commentVerbList = ["Made", "Created", "Deleted", "Edited"];
+            var commentAdjList = ["more", "less", "some"];
+            var commentNounList = ["code", "changes", "edits"];
+            var commentObjectList = ["program", "executable", "exploit", "app", "runnable"];
+            //
+            var randomVerb = commentVerbList[Math.floor(Math.random() * commentVerbList.length)];
+            var randomNoun = commentNounList[Math.floor(Math.random() * commentNounList.length)];
+            var randomAdj = commentAdjList[Math.floor(Math.random() * commentAdjList.length)];
+            var randomObject = commentObjectList[Math.floor(Math.random() * commentObjectList.length)];
+            $("#main").append('<p class="comment indent-' + codeLevel + '">// ' + randomVerb + ' ' + randomAdj + ' ' + randomNoun + ' to ' + randomObject + '</p>');
+            setTimeout(function() {
+                writeCode()
+            }, 1000);
+        }
+
+        function writeCode() {
+            $("html, body").animate({
+                scrollTop: $(document).height()
+            }, "slow");
+            //var functions = ["function", "object", "variable", "comment"];
+            var functions = ["function", "comment", "variable", "singleop"];
+            currentFunction = functions[Math.floor(Math.random() * functions.length)];
+            console.log(currentFunction);
+            switch (currentFunction) {
+                case "function":
+                    writeFunction();
+                    break;
+                case "comment":
+                    writeComment();
+                    break;
+                case "variable":
+                    writeVariable();
+                    break;
+                case "singleop":
+                    writeSingleOperator();
+                    break;
+                default:
+                    console.log("Something died.");
+            }
+        }
+        writeCode();
+    </script>
+</body>
+
+</html>
