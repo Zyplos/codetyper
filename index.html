@@ -8,7 +8,7 @@
         background-color: #31343f;
         color: #dae2f7;
         font-family: monospace;
-        margin-bottom: 30%;
+        margin-bottom: 20%;
         overflow: hidden;
       }
 
@@ -26,6 +26,18 @@
 
       .variable {
         color: #face5c;
+      }
+
+      .object {
+        color: #5c93fa;
+      }
+
+      .function {
+        color: #abfa5c;
+      }
+
+      .argument {
+        color: #5cf0fa;
       }
 
       .indent-1 {
@@ -58,17 +70,22 @@
       var currentFunction;
       var writingBodyCode = false;
       var writingForLoopCode = false;
+      var writingWhileLoopCode = false;
+      var writeSpeed = 600;
 
       function writeFunction() {
+        if (writingForLoopCode || writingWhileLoopCode) {
+          writeCode();
+          return;
+        }
         if (writingBodyCode) {
           if (Math.random() < 0.5) {
             writingBodyCode = false;
             codeLevel--;
             $("#main").append('<p class="indent-' + codeLevel + '">}</p>');
-
             setTimeout(function() {
               writeCode();
-            }, 1000);
+            }, writeSpeed);
             return;
           }
           //
@@ -86,7 +103,7 @@
         var randomNoun = functionNameNouns[Math.floor(Math.random() * functionNameNouns.length)];
         if (argument) {
           var randomArgument = argumentList[Math.floor(Math.random() * argumentList.length)];
-          $("#main").append('<p><span class="keyword">function</span> <span class="keyword2">' + randomVerb + '' + randomNoun + '</span>(<span class="variable">' + randomArgument + '</span>) {' + '</p>');
+          $("#main").append('<p><span class="keyword">function</span> <span class="keyword2">' + randomVerb + '' + randomNoun + '</span>(<span class="argument">' + randomArgument + '</span>) {' + '</p>');
         } else {
           $("#main").append('<p><span class="keyword">function</span> <span class="keyword2">' + randomVerb + '' + randomNoun + '</span>() {' + '</p>');
         }
@@ -96,19 +113,18 @@
         }
         setTimeout(function() {
           writeCode();
-        }, 1000);
+        }, writeSpeed);
       }
 
       function writeForLoop() {
         if (writingForLoopCode) {
           if (Math.random() < 0.8) {
             writingForLoopCode = false;
-              codeLevel--;
+            codeLevel--;
             $("#main").append('<p class="indent-' + codeLevel + '">}</p>');
-
             setTimeout(function() {
               writeCode();
-            }, 1000);
+            }, writeSpeed);
             return;
           }
           //
@@ -117,19 +133,104 @@
         }
         var forloopObjectList = ["user", "post", "data", "api"];
         var forloopNounList = ["list", "base", "array", "object", "val", "value", "temp", "main", "override", "code", "debug", "metadata", "content"];
-
         var randomObject = forloopNounList[Math.floor(Math.random() * forloopNounList.length)];
         var randomNoun = forloopObjectList[Math.floor(Math.random() * forloopObjectList.length)];
-$("#main").append('<p class="indent-'+codeLevel+'"><span class="keyword">for</span> (<span class="keyword2">var</span> <span class="variable">i</span> = 0; <span class="variable">i</span> < <span class="variable">' + randomNoun + '_' + randomObject + '</span>; <span class="variable">i</span>++){</p>');
-
-
+        $("#main").append('<p class="indent-' + codeLevel + '"><span class="keyword">for</span> (<span class="keyword2">var</span> <span class="variable">i</span> = 0; <span class="variable">i</span> < <span class="variable">' + randomNoun + '_' +
+          randomObject + '</span>; <span class="variable">i</span>++) {</p>');
         if (!writingForLoopCode) {
           codeLevel++;
           writingForLoopCode = true;
         }
         setTimeout(function() {
           writeCode();
-        }, 1000);
+        }, writeSpeed);
+      }
+
+      function writeWhileLoop() {
+        if (writingWhileLoopCode) {
+          if (Math.random() < 0.8) {
+            writingWhileLoopCode = false;
+            codeLevel--;
+            $("#main").append('<p class="indent-' + codeLevel + '">}</p>');
+            setTimeout(function() {
+              writeCode();
+            }, writeSpeed);
+            return;
+          }
+          //
+          writeCode();
+          return;
+        }
+        var whileloopObjectList = ["user", "post", "data", "api"];
+        var whileloopNounList = ["list", "base", "array", "object", "val", "value", "temp", "main", "override", "code", "debug", "metadata", "content"];
+        var variableOperatorList = ["<", ">", "!=", "==", "==="];
+        //
+        var randomObject = whileloopNounList[Math.floor(Math.random() * whileloopNounList.length)];
+        var randomNoun = whileloopObjectList[Math.floor(Math.random() * whileloopObjectList.length)];
+        var randomObject2 = whileloopNounList[Math.floor(Math.random() * whileloopNounList.length)];
+        var randomNoun2 = whileloopObjectList[Math.floor(Math.random() * whileloopObjectList.length)];
+        var randomOperator = variableOperatorList[Math.floor(Math.random() * variableOperatorList.length)];
+        //
+        var comparing;
+        if (Math.random() < 0.5) {
+          comparing = randomNoun2 + "_" + randomObject2;
+        } else {
+          comparing = Math.random();
+          if (Math.random() < 0.5) {
+            Math.floor(comparing);
+          }
+        }
+        //
+        $("#main").append('<p class="indent-' + codeLevel + '"><span class="keyword">while</span> (<span class="variable">' + randomNoun + '_' + randomObject + '</span> ' + randomOperator + ' <span class="argument">' + comparing + '</span>) {</p>');
+        if (!writingWhileLoopCode) {
+          codeLevel++;
+          writingWhileLoopCode = true;
+        }
+        setTimeout(function() {
+          writeCode();
+        }, writeSpeed);
+      }
+
+      function writeCallFunction(){
+        var functionNameVerbs = ["make", "delete", "get", "edit", "create", "post"];
+        var functionNameNouns = ["Cake", "Metadata", "Username", "IP", "Function", "Backend", "Password", "Payload", "Exploit"];
+        var argumentList = ["data", "snapshot", "username", "password", "ip", "exploit_name"];
+        var functionObjectList = ["mainData", "coreData", "CORE" , "app", "program", "exec", "tskmgr"];
+        var argument;
+        if (Math.random() > 0.5) {
+          argument = "";
+        } else {
+          if (Math.random() > 0.3) {
+            argument = argumentList[Math.floor(Math.random() * argumentList.length)];
+          } else {
+            if (Math.random() > 0.3) {
+              argument = Math.floor(Math.random() * 100);
+            } else {
+              if (Math.random() > 0.5) {
+                argument = "true";
+              } else {
+                argument = "false";
+              }
+            }
+          }
+        }
+        var randomObject;
+        if (Math.random() > 0.5) {
+          randomObject = functionObjectList[Math.floor(Math.random() * functionObjectList.length)];
+        }
+
+        var randomVerb = functionNameVerbs[Math.floor(Math.random() * functionNameVerbs.length)];
+        var randomNoun = functionNameNouns[Math.floor(Math.random() * functionNameNouns.length)];
+
+        if (randomObject) {
+          $("#main").append('<p class="indent-'+codeLevel+'"><span class="object">'+randomObject+'</span>.<span class="function">'+ randomVerb + '' + randomNoun +'</span>(<span class="argument">'+argument+'</span>);</p>');
+        } else {
+          $("#main").append('<p class="indent-'+codeLevel+'"><span class="function">'+ randomVerb + '' + randomNoun +'</span>(<span class="argument">'+argument+'</span>);</p>');
+        }
+
+        setTimeout(function() {
+          writeCode();
+        }, writeSpeed);
       }
 
       function writeVariable() {
@@ -176,7 +277,7 @@ $("#main").append('<p class="indent-'+codeLevel+'"><span class="keyword">for</sp
         //
         setTimeout(function() {
           writeCode()
-        }, 1000);
+        }, writeSpeed);
       }
 
       function writeSingleOperator() {
@@ -203,7 +304,7 @@ $("#main").append('<p class="indent-'+codeLevel+'"><span class="keyword">for</sp
         //
         setTimeout(function() {
           writeCode()
-        }, 1000);
+        }, writeSpeed);
       }
 
       function writeComment() {
@@ -219,15 +320,15 @@ $("#main").append('<p class="indent-'+codeLevel+'"><span class="keyword">for</sp
         $("#main").append('<p class="comment indent-' + codeLevel + '">// ' + randomVerb + ' ' + randomAdj + ' ' + randomNoun + ' to ' + randomObject + '</p>');
         setTimeout(function() {
           writeCode()
-        }, 1000);
+        }, writeSpeed);
       }
 
       function writeCode() {
         $("html, body").animate({
           scrollTop: $(document).height()
-        }, "slow");
+        }, 0);
         //var functions = ["function", "object", "variable", "comment"];
-        var functions = ["function", "comment", "variable", "singleop", "forloop"];
+        var functions = ["function", "comment", "variable", "singleop", "forloop", "whileloop", "callfunction"];
         currentFunction = functions[Math.floor(Math.random() * functions.length)];
         console.log(currentFunction);
         switch (currentFunction) {
@@ -246,6 +347,12 @@ $("#main").append('<p class="indent-'+codeLevel+'"><span class="keyword">for</sp
           case "forloop":
             writeForLoop();
             break;
+          case "whileloop":
+            writeWhileLoop();
+            break;
+            case "callfunction":
+              writeCallFunction();
+              break;
           default:
             console.log("Something died.");
         }
