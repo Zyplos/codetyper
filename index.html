@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>CodeGenerator | zySandbox</title>
+    <title>CodeTyper</title>
     <style>
       body {
         background-color: #31343f;
@@ -65,6 +65,19 @@
   <body>
     <div id="main"> </div>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    
+    <script>
+      // https://stackoverflow.com/questions/8897289/how-to-check-if-an-element-is-off-screen
+    jQuery.expr.filters.offscreen = function(el) {
+  var rect = el.getBoundingClientRect();
+  return (
+           (rect.x + rect.width) < 0 
+             || (rect.y + rect.height) < 0
+             || (rect.x > window.innerWidth || rect.y > window.innerHeight)
+         );
+};
+    </script>
+    
     <script>
       var codeLevel = 0;
       var currentFunction;
@@ -327,6 +340,8 @@
         $("html, body").animate({
           scrollTop: $(document).height()
         }, 0);
+        //
+        $(':offscreen').remove();
         //var functions = ["function", "object", "variable", "comment"];
         var functions = ["function", "comment", "variable", "singleop", "forloop", "whileloop", "callfunction"];
         currentFunction = functions[Math.floor(Math.random() * functions.length)];
